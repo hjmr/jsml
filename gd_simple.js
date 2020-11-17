@@ -1,7 +1,3 @@
-let a = [-4.0, 3.5, 1.3];
-let w = [0.1, 0.1, 0.1]; // initial values
-let alpha = 0.001;
-
 function target(x) {
     let y = a[0] * x * x + a[1] * x + a[2];
     return y;
@@ -23,21 +19,21 @@ function err(x) {
     return e;
 }
 
-function delta_w(x) {
-    let y = estimated(x);
-    let y_hat = target(x);
-    let dydw = d_target(x);
-    let d = (y - y_hat);
-    return [d * dydw[0], d * dydw[1], d * dydw[2]];
-}
+
+let a = [-4.0, 3.5, 1.3];
+let w = [0.1, 0.1, 0.1]; // initial values
+let alpha = 0.001;
 
 for( let i = 0 ; i < 10000 ; i++ ) {
     let E = 0;
     let dw = [0, 0, 0];
     for( let x = -5 ; x < 5 ; x++) {
-        let delta = delta_w(x);
+        let y = estimated(x);
+        let y_hat = target(x);
+        let dydw = d_target(x);
+        let d = (y - y_hat);
         for(let i in dw) {
-            dw[i] += delta[i];
+            dw[i] += d * dydw[i];
         }
         E += err(x);
     }
@@ -48,4 +44,3 @@ for( let i = 0 ; i < 10000 ; i++ ) {
 
 console.log("ground truth:" + a);
 console.log("   estimated:" + w);
-
